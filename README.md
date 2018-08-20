@@ -34,6 +34,9 @@
 
 ----------
 
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTheGoddessInari%2Frambox.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FTheGoddessInari%2Frambox?ref=badge_large)
+
 ## Table of Contents
 
 - [Screenshot](#screenshot)
@@ -54,6 +57,7 @@
 ## Screenshot
 
 ![Rambox-OS](./resources/screenshots/win1.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTheGoddessInari%2Frambox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FTheGoddessInari%2Frambox?ref=badge_shield)
 
 
 ## Services available - 97
