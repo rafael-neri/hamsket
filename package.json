@@ -1,115 +1,118 @@
 {
-	"private": true,
-	"scripts": {
-		"start": "electron electron/main.js",
-		"start:debug": "electron electron/main.js --enable-logging",
-		"test": "./node_modules/.bin/mocha test/tests/**/*.spec.js",
-		"clean": "rimraf ./build/production",
-		"compile": "sencha app build && cpy app/package.json app/package-lock.json build/production/Rambox/",
-		"recompile": "npm run distclean && npm run compile",
-		"distclean": "rimraf ./dist",
-		"distclean:win": "rimraf ./dist/win-{ia32-,}unpacked",
-		"distclean:linux": "rimraf ./dist/linux-{ia32-,}unpacked",
-		"distclean:osx": "rimraf ./dist/macos-unpacked",
-		"pack": "electron-builder --dir",
-		"pack:osx": "electron-builder --macos --dir",
-		"pack:win": "electron-builder --win --ia32 --x64 --dir",
-		"pack:win32": "electron-builder --win --ia32 --dir",
-		"pack:win64": "electron-builder --win --x64 --dir",
-		"pack:linux": "electron-builder --linux --ia32 --x64 --dir",
-		"pack:linux32": "electron-builder --linux --ia32 --dir",
-		"pack:linux64": "electron-builder --linux --x64 --dir",
-		"pack:all": "electron-builder -mwl --ia32 --x64 --dir",
-		"build": "electron-builder",
-		"build:osx": "electron-builder --macos",
-		"build:linux": "electron-builder --linux --ia32 --x64",
-		"build:linux32": "electron-builder --linux --ia32",
-		"build:linux64": "electron-builder --linux --x64",
-		"build:win": "electron-builder --win --ia32 --x64",
-		"build:win32": "electron-builder --win --ia32",
-		"build:win64": "electron-builder --win --x64",
-		"build:all": "electron-builder -mwl --ia32 --x64",
-		"setup": "npm run clean && npm run compile && npm run build",
-		"setup:osx": "npm run clean && npm run compile && npm run build:osx",
-		"setup:win": "npm run clean && npm run compile && npm run build:win",
-		"setup:win32": "npm run clean && npm run compile && npm run build:win32",
-		"setup:win64": "npm run clean && npm run compile && npm run build:win64",
-		"setup:linux": "npm run clean && npm run compile && npm run build:linux",
-		"setup:linux32": "npm run clean && npm run compile && npm run build:linux32",
-		"setup:linux64": "npm run clean && npm run compile && npm run build:linux64",
-		"repack": "npm run clean && npm run compile && npm run distclean && npm run pack",
-		"repack:osx": "npm run clean && npm run compile && npm run distclean:osx && npm run pack:osx",
-		"repack:win": "npm run clean && npm run compile && npm run distclean:win && npm run pack:win",
-		"repack:win32": "npm run clean && npm run compile && npm run distclean:win && npm run pack:win32",
-		"repack:win64": "npm run clean && npm run compile && npm run distclean:win && npm run pack:win64",
-		"repack:linux": "npm run clean && npm run compile && npm run distclean:linux && npm run pack:linux",
-		"repack:linux32": "npm run clean && npm run compile && npm run distclean:linux && npm run pack:linux32",
-		"repack:linux64": "npm run clean && npm run compile && npm run distclean:linux && npm run pack:linux64",
-		"dist": "npm run repack"
-	},
-	"build": {
-		"productName": "Rambox-OS",
-		"appId": "com.thegoddessinari.rambox",
-		"asar": true,
-		"publish": null,
-		"mac": {
-			"category": "public.app-category.productivity",
-			"target": [
-				"default"
-			]
-		},
-		"dmg": {
-			"title": "Rambox-OS",
-			"iconSize": 128,
-			"contents": [
-				{
-					"x": 355,
-					"y": 125,
-					"type": "link",
-					"path": "/Applications"
-				},
-				{
-					"x": 155,
-					"y": 125,
-					"type": "file"
-				}
-			]
-		},
-		"win": {
-			"target": [
-				"nsis"
-			]
-		},
-		"linux": {
-			"category": "Office",
-			"desktop": {
-				"Terminal": "false",
-				"Type": "Application",
-				"Categories": "GTK;GNOME;Utility;Office;Email;Chat;InstantMessaging;"
-			},
-			"target": [
-				"tar.gz",
-				"deb",
-				"rpm",
-				"AppImage"
-			]
-		},
-		"directories": {
-			"buildResources": "resources/installer/",
-			"output": "dist/",
-			"app": "build/production/Rambox/"
-		}
-	},
-	"devDependencies": {
-		"asar": "^0.14.3",
-		"chai": "^4.1.2",
-		"cpy-cli": "^2.0.0",
-		"crowdin": "^1.0.0",
-		"csvjson": "^5.1.0",
-		"electron": "^2.0.8",
-		"electron-builder": "^20.28.3",
-		"mocha": "^5.2.0",
-		"rimraf": "^2.6.2",
-		"spectron": "^3.8.0"
-	}
+  "private": true,
+  "scripts": {
+    "start": "electron electron/main.js",
+    "start:debug": "electron electron/main.js --enable-logging",
+    "test": "./node_modules/.bin/mocha test/tests/**/*.spec.js",
+    "clean": "rimraf ./build/production",
+    "compile": "sencha app build && cpy app/package.json app/package-lock.json build/production/Rambox/",
+    "recompile": "npm run distclean && npm run compile",
+    "distclean": "rimraf ./dist",
+    "distclean:win": "rimraf ./dist/win-{ia32-,}unpacked",
+    "distclean:linux": "rimraf ./dist/linux-{ia32-,}unpacked",
+    "distclean:osx": "rimraf ./dist/macos-unpacked",
+    "pack": "electron-builder --dir",
+    "pack:osx": "electron-builder --macos --dir",
+    "pack:win": "electron-builder --win --ia32 --x64 --dir",
+    "pack:win32": "electron-builder --win --ia32 --dir",
+    "pack:win64": "electron-builder --win --x64 --dir",
+    "pack:linux": "electron-builder --linux --ia32 --x64 --dir",
+    "pack:linux32": "electron-builder --linux --ia32 --dir",
+    "pack:linux64": "electron-builder --linux --x64 --dir",
+    "pack:all": "electron-builder -mwl --ia32 --x64 --dir",
+    "build": "electron-builder",
+    "build:osx": "electron-builder --macos",
+    "build:linux": "electron-builder --linux --ia32 --x64",
+    "build:linux32": "electron-builder --linux --ia32",
+    "build:linux64": "electron-builder --linux --x64",
+    "build:win": "electron-builder --win --ia32 --x64",
+    "build:win32": "electron-builder --win --ia32",
+    "build:win64": "electron-builder --win --x64",
+    "build:all": "electron-builder -mwl --ia32 --x64",
+    "setup": "npm run clean && npm run compile && npm run build",
+    "setup:osx": "npm run clean && npm run compile && npm run build:osx",
+    "setup:win": "npm run clean && npm run compile && npm run build:win",
+    "setup:win32": "npm run clean && npm run compile && npm run build:win32",
+    "setup:win64": "npm run clean && npm run compile && npm run build:win64",
+    "setup:linux": "npm run clean && npm run compile && npm run build:linux",
+    "setup:linux32": "npm run clean && npm run compile && npm run build:linux32",
+    "setup:linux64": "npm run clean && npm run compile && npm run build:linux64",
+    "repack": "npm run clean && npm run compile && npm run distclean && npm run pack",
+    "repack:osx": "npm run clean && npm run compile && npm run distclean:osx && npm run pack:osx",
+    "repack:win": "npm run clean && npm run compile && npm run distclean:win && npm run pack:win",
+    "repack:win32": "npm run clean && npm run compile && npm run distclean:win && npm run pack:win32",
+    "repack:win64": "npm run clean && npm run compile && npm run distclean:win && npm run pack:win64",
+    "repack:linux": "npm run clean && npm run compile && npm run distclean:linux && npm run pack:linux",
+    "repack:linux32": "npm run clean && npm run compile && npm run distclean:linux && npm run pack:linux32",
+    "repack:linux64": "npm run clean && npm run compile && npm run distclean:linux && npm run pack:linux64",
+    "dist": "npm run repack"
+  },
+  "build": {
+    "productName": "Rambox-OS",
+    "appId": "com.thegoddessinari.rambox",
+    "asar": true,
+    "publish": null,
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "default"
+      ]
+    },
+    "dmg": {
+      "title": "Rambox-OS",
+      "iconSize": 128,
+      "contents": [
+        {
+          "x": 355,
+          "y": 125,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 155,
+          "y": 125,
+          "type": "file"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "category": "Office",
+      "desktop": {
+        "Terminal": "false",
+        "Type": "Application",
+        "Categories": "GTK;GNOME;Utility;Office;Email;Chat;InstantMessaging;"
+      },
+      "target": [
+        "tar.gz",
+        "deb",
+        "rpm",
+        "AppImage"
+      ]
+    },
+    "directories": {
+      "buildResources": "resources/installer/",
+      "output": "dist/",
+      "app": "build/production/Rambox/"
+    }
+  },
+  "devDependencies": {
+    "asar": "^0.14.3",
+    "auto-launch-patched": "^5.0.2",
+    "chai": "^4.1.2",
+    "cpy-cli": "^2.0.0",
+    "crowdin": "^1.0.0",
+    "csvjson": "^5.1.0",
+    "electron": "^2.0.8",
+    "electron-builder": "^20.28.3",
+    "electron-is-dev": "^0.3.0",
+    "electron-store": "^2.0.0",
+    "mocha": "^5.2.0",
+    "rimraf": "^2.6.2",
+    "spectron": "^3.8.0"
+  }
 }
