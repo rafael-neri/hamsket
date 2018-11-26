@@ -86,7 +86,7 @@ Ext.define('Rambox.store.ServicesList', {
 			,description: locale['services[6]']
 			,url: 'https://___.hipchat.com/chat'
 			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const e=document.getElementsByClassName("hc-badge");let t=0;for(let i in e)t+=parseInt(i.innerHTML.trim());rambox.updateBadge(t)};setInterval(checkUnread,3e3);`
+			,js_unread: `let checkUnread=()=>{const e=document.getElementsByClassName("hc-badge");let t=0;for(let i in e)t+=parseInt((i.innerHTML || '0').trim());rambox.updateBadge(t)};setInterval(checkUnread,3e3);`
 			,custom_domain: true
 		},
 		{
