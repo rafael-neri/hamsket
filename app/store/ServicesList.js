@@ -28,7 +28,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,description: locale['services[0]']
 			,url: 'https://web.whatsapp.com/'
 			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll(".P6z4j, .unread");let count=0;for(let i of elements)0===i.querySelectorAll('*[data-icon="muted"]').length&&count++;hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
+			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll("#pane-side .P6z4j, .unread");let count=0;for (let i = 0; i < elements.length; i++) {if (elements[i].parentNode.parentNode.querySelectorAll('#pane-side *[data-icon="muted"]').length === 0) {count++;}}hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
 		},
 		{
 			 id: 'slack'
