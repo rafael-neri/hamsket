@@ -23,7 +23,7 @@ Ext.define('Hamsket.util.IconLoader', {
 						`(() => {
 							let icon = document.querySelector('.c-team_icon');
 							if (!icon) {
-								const doc = document.querySelector('#team-menu-trigger');
+								const doc = document.querySelector('#team-menu-trigger') || document.querySelector('.p-ia__sidebar_header__button');
 								if (doc) {
 									doc.click();
 									icon = document.querySelector('.c-team_icon');
