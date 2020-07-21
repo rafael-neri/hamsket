@@ -811,7 +811,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,url: 'https://voice.google.com'
 			,type: 'messaging'
 			,userAgent: 'Mozilla/5.0 (X11; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0'
-			,js_unread: `let parseIntOrZero=e=>isNaN(parseInt(e))?0:parseInt(e),checkUnread=()=>{const e=document.querySelector(".msgCount");let n=0;e?n=parseIntOrZero(e.innerHTML.replace(/[() ]/gi,"")):["Messages","Calls","Voicemail"].forEach(function(e){const r=document.querySelector('gv-nav-tab[tooltip="+e+"] div[aria-label="Unread count"]');r&&(n+=parseIntOrZero(r.innerHTML))}),hamsket.updateBadge(n)};setInterval(checkUnread,3e3);;`
+			,js_unread: `let checkUnread=()=>{let n=0;['sidenav-calls','sidenav-messages','sidenav-voicemail'].forEach(function(id){const text=document.querySelector("a[gv-test-id='"+id+"']").text;const matches=text.match(/\d+/g);matches&&(n+=parseInt(matches[0]))});hamsket.updateBadge(n)};setInterval(checkUnread,3e3)`
 		},
 		{
 			 id: 'sandstorm'
