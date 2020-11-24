@@ -24,6 +24,8 @@
      */
     "framework": "ext",
 
+    "toolkit": "classic",
+
     /**
      * The name of the theme for this application.
      */
@@ -39,9 +41,11 @@
      *          "sencha-charts"
      *      ]
      */
-    "requires": [
-		"ext-locale"
-    ],
+     "requires": [
+         "ux",
+         "font-awesome",
+         "icofont"
+     ],
     "language":
     {
         "js":{
@@ -149,6 +153,14 @@
             "path": "bootstrap.css",
             "bootstrap": true,
             "bundle": true
+        },
+        {
+            "path": "https://fonts.googleapis.com/css?family=Josefin+Sans:400,700,600)",
+            "remote": true
+        },
+        {
+            "path": "https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,700italic,700,500italic,500,400italic",
+            "remote": true
         }
     ],
 

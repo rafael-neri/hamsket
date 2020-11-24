@@ -36,7 +36,7 @@
      *
      *    "extend": "parent-theme-package",
      */
-    "extend": "ext-theme-crisp",
+    "extend": "theme-crisp",
 
     /**
      * The toolkit used by this theme (only for "theme" package type).

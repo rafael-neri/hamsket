@@ -1,12 +1,14 @@
 // Sencha App
 Ext.setGlyphFontFamily('FontAwesome');
-Ext.application({
+Ext.define('Hamsket.app.Application', {
 	 name: 'Hamsket'
 
 	,extend: 'Hamsket.Application'
 
-	,autoCreateViewport: 'Hamsket.view.main.Main'
+	,mainView: 'Hamsket.view.main.Main'
 });
+
+Ext.application('Hamsket.app.Application');
 
 // auto update logic
 const ipc = require('electron').ipcRenderer;
