@@ -28,7 +28,29 @@ Ext.define('Hamsket.store.ServicesList', {
 			,description: locale['services[0]']
 			,url: 'https://web.whatsapp.com/'
 			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll("#pane-side .VOr2j");let count=0;for(const i of elements){const gp=i.parentNode.parentNode;0===gp.querySelectorAll('#pane-side *[data-icon="muted"]').length&&count++}hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
+			,js_unread: `
+        const className = Array.from(document.styleSheets)
+          .flatMap(s => Array.from(s.cssRules))
+          .filter(r => r instanceof CSSStyleRule)
+          .find(({style}) => style.color === 'var(--unread-marker-text)')
+          .selectorText.split('.').reverse()[0]
+        let checkUnread = () => {
+          const elements = document.querySelectorAll(\`#pane-side .\${className}\`)
+          let count=0
+          for (const i of elements) {
+            const gp = i.parentNode.parentNode
+            0===gp.querySelectorAll('#pane-side *[data-icon="muted"]').length && count++
+          }
+          hamsket.updateBadge(count)
+        }
+        setInterval(checkUnread, 1e3)
+        let unregister_queue=[]
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (const registration of registrations)
+            unregister_queue.push(registration.unregister())
+          return unregister_queue
+        }).then(queue => {}).catch(err => {})
+      `
 		},
 		{
 			 id: 'slack'
