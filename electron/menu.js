@@ -2,12 +2,13 @@
 const os = require('os');
 const {app, BrowserWindow, Menu, shell}  = require('electron');
 const path = require('path');
+const {isMac} = require('./utils/processEnvironment');
 const appName = app.name;
 
 function sendAction(action, ...args) {
 	const win = BrowserWindow.getAllWindows()[0];
 
-	if (process.platform === 'darwin') {
+	if (isMac) {
 		win.restore();
 	}
 
@@ -346,7 +347,7 @@ module.exports = function(config) {
 				},
 				{
 					label: '&'+locale['menu.view[3]'],
-					accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+					accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
 					click(item, focusedWindow) {
 						if (focusedWindow) focusedWindow.webContents.toggleDevTools();
 					}
@@ -359,7 +360,7 @@ module.exports = function(config) {
 		}
 	];
 
-	if (process.platform === 'darwin') {
+	if (isMac) {
 		tpl.unshift({
 			label: appName,
 			submenu: [
