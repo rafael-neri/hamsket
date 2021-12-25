@@ -1,14 +1,15 @@
 const path = require('path');
-const {app, electron, nativeImage, Menu, MenuItem, Tray} = require('electron');
+const {app, nativeImage, Menu, MenuItem, Tray} = require('electron');
+const {isMac, isLinux} = require('./utils/processEnvironment');
 // Module to create tray icon
 
 let appIcon = null;
 
 exports.create = function(win, config) {
-	if (process.platform === 'darwin' || appIcon || config.get('window_display_behavior') === 'show_taskbar' ) return;
+	if (isMac || appIcon || config.get('window_display_behavior') === 'show_taskbar' ) return;
 
 	const locale = require(path.join(app.getAppPath(), '/resources/languages/'+config.get('locale')));
-	const iconName = process.platform === 'linux' || process.platform === 'darwin' ? 'IconTray.png' : 'Icon.ico';
+	const iconName = isLinux || isMac ? 'IconTray.png' : 'Icon.ico';
 	const iconPath = path.join(app.getAppPath(), `/resources/${iconName}`);
 	const icon = nativeImage.createFromPath(iconPath);
 
@@ -62,10 +63,10 @@ exports.destroy = function() {
 };
 
 exports.setBadge = function(messageCount, showUnreadTray) {
-	if (process.platform === 'darwin' || !appIcon) return;
+	if (isMac || !appIcon) return;
 
 	let iconName;
-	if (process.platform === 'linux') {
+	if (isLinux) {
 		iconName = messageCount > 0 && showUnreadTray ? 'IconTrayUnread.png' : 'IconTray.png';
 	} else {
 		iconName = messageCount > 0 && showUnreadTray ? 'IconTrayUnread.ico' : 'Icon.ico';

@@ -13,6 +13,7 @@ const updater = require('./updater');
 const fs = require("fs");
 const path = require('path');
 const contextMenu = require('electron-context-menu');
+const {isMac, isLinux, isWindows} = require('./utils/processEnvironment');
 
 // If 'data' folder exists in Hamsket's folder, set userdata, logs, and usercache path to there
 var basepath = app.getAppPath();
@@ -36,7 +37,7 @@ const config = new Config({
 		,systemtray_indicator: true
 		,master_password: false
 		,dont_disturb: false
-		,disable_gpu: process.platform === 'linux'
+		,disable_gpu: isLinux
 		,proxy: false
 		,proxyHost: ''
 		,proxyPort: ''
@@ -57,7 +58,7 @@ const config = new Config({
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 
 // Fix issues with HiDPI scaling on Windows platform
-if (config.get('enable_hidpi_support') && (process.platform === 'win32')) {
+if (config.get('enable_hidpi_support') && isWindows) {
 	app.commandLine.appendSwitch('high-dpi-support', 'true');
 	app.commandLine.appendSwitch('force-device-scale-factor', '1');
 }
@@ -103,7 +104,7 @@ function createWindow () {
 	// Create the browser window using the state information
 	mainWindow = new BrowserWindow({
 		 title: 'Hamsket'
-		,icon: nativeImage.createFromPath(path.join(app.getAppPath(), '/resources/Icon.' + (process.platform === 'linux' ? 'png' : 'ico')))
+		,icon: nativeImage.createFromPath(path.join(app.getAppPath(), '/resources/Icon.' + (isLinux ? 'png' : 'ico')))
 		,backgroundColor: '#FFF'
 		,x: config.get('x')
 		,y: config.get('y')
@@ -251,10 +252,10 @@ function updateBadge(title) {
 	title = title.split(" - ")[0]; //Discard service name if present, could also contain digits
 	let messageCount = title.match(/\d+/g) ? parseInt(title.match(/\d+/g).join("")) : 0;
 	messageCount = isNaN(messageCount) ? 0 : messageCount;
-	
+
 	tray.setBadge(messageCount, config.get('systemtray_indicator'));
 
-	if (process.platform === 'win32') { // Windows
+	if (isWindows) { // Windows
 		if (messageCount === 0) {
 			mainWindow.setOverlayIcon(null, "");
 			return;
@@ -524,7 +525,7 @@ ipcMain.on('image:popup', function(event, url, partition) {
 		 width: mainWindow.getBounds().width
 		,height: mainWindow.getBounds().height
 		,parent: mainWindow
-		,icon: nativeImage.createFromPath(path.join(app.getAppPath(), '/resources/Icon.' + (process.platform === 'linux' ? 'png' : 'ico')))
+		,icon: nativeImage.createFromPath(path.join(app.getAppPath(), '/resources/Icon.' + (isLinux ? 'png' : 'ico')))
 		,backgroundColor: '#FFF'
 		,autoHideMenuBar: true
 		,skipTaskbar: true
@@ -544,7 +545,7 @@ ipcMain.on('toggleWin', function(event, alwaysShow) {
 			mainWindow.close();
 		} else {
 			mainWindow.show();
-		} 
+		}
 	} else if ( mainWindow.isMinimized() && !mainWindow.isMaximized() && !mainWindow.isVisible() ) { // Minimized
 		mainWindow.restore();
 	} else if ( !mainWindow.isMinimized() && !mainWindow.isMaximized() && mainWindow.isVisible() ) { // Windowed mode
@@ -599,7 +600,7 @@ app.on('ready', function() {
 app.on('window-all-closed', function () {
 	// On OS X it is common for applications and their menu bar
 	// to stay active until the user quits explicitly with Cmd + Q
-	if (process.platform !== 'darwin') {
+	if (!isMac) {
 		app.quit();
 	}
 });
@@ -630,11 +631,12 @@ app.on('web-contents-created', (event, contents) => {
 		showSaveImage: false,
 		showSaveImageAs: true,
 	});
-    contents.on('will-attach-webview', (event, webPreferences, params) => {
+
+	contents.on('will-attach-webview', (event, webPreferences, params) => {
 		// Always prevent node integration
 		webPreferences.nodeIntegration = false;
-
 	});
+
 	contents.on('destroyed', function() {
 		contextMenuWebContentsDispose();
 	})

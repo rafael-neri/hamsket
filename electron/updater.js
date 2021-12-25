@@ -1,6 +1,7 @@
 const {app, autoUpdater, ipcMain} = require('electron');
+const {isMac} = require('./utils/processEnvironment');
 const version = app.getVersion();
-const platform = process.platform === 'darwin' ? 'osx' : process.platform;
+const platform = isMac ? 'osx' : process.platform;
 const url = `https://gethamsket.herokuapp.com/update/${platform}/${version}`;
 
 const initialize = (window) => {
