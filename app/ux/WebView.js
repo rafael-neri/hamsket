@@ -15,6 +15,7 @@ Ext.define('Hamsket.ux.WebView',{
 	// private
 	,zoomLevel: 0
 	,currentUnreadCount: 0
+	,isReady: false
 
 	// CONFIG
 	,hideMode: 'offsets'
@@ -147,15 +148,12 @@ Ext.define('Hamsket.ux.WebView',{
 		let cfg;
 		enabled = enabled || me.record.get('enabled');
 
-		if ( !enabled ) {
-			cfg = [{
+		cfg = !enabled ? [{
 				 xtype: 'container'
 				,html: '<h3>Service Disabled</h3>'
 				,style: 'text-align:center;'
 				,padding: 100
-			}];
-		} else {
-			cfg = [{
+			}] : [{
 				 xtype: 'component'
 				,hideMode: 'offsets'
 				,autoRender: true
@@ -167,15 +165,13 @@ Ext.define('Hamsket.ux.WebView',{
 					,partition: 'persist:' + me.record.get('type') + '_' + me.id.replace('tab_', '')
 					,allowtransparency: 'on'
 					,autosize: 'on'
-					,webpreferences: 'enableRemoteModule=yes,spellcheck=yes' //,nativeWindowOpen=true
+					,webpreferences: 'nativeWindowOpen=yes,spellcheck=yes,contextIsolation=no' //,nativeWindowOpen=true
+					,allowpopups: 'on'
 					//,disablewebsecurity: 'on' // Disabled because some services (Like Google Drive) dont work with this enabled
 					,userAgent: me.getUserAgent()
 					,preload: './resources/js/hamsket-service-api.js'
 				}
 			}];
-
-			if ( Ext.getStore('ServicesList').getById(me.record.get('type')).get('allow_popups') ) cfg[0].autoEl.allowpopups = 'on';
-		}
 
 		return cfg;
 	}
@@ -231,21 +227,8 @@ Ext.define('Hamsket.ux.WebView',{
 			console.info('Start loading...', me.src);
 			if ( !me.down('statusbar').closed || !me.down('statusbar').keep ) me.down('statusbar').show();
 			me.down('statusbar').showBusy();
-			me.getWebContents().session.webRequest.onBeforeSendHeaders(
-				{
-					urls: [
-						'https://accounts.google.com/',
-						'https://accounts.google.com/*'
-					]
-				},
-				(details, callback) => {
-					details.requestHeaders['User-Agent'] =
-						'Mozilla/5.0 (X11; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0';
-					callback({ requestHeaders: details.requestHeaders });
-				}
-			);
-
 		});
+
 		webview.addEventListener("did-stop-loading", function() {
 			me.down('statusbar').clearStatus({useDefaults: true});
 			if ( !me.down('statusbar').keep ) me.down('statusbar').hide();
@@ -262,141 +245,15 @@ Ext.define('Hamsket.ux.WebView',{
 		});
 
 		// Open links in default browser
-		webview.addEventListener('new-window', function(e) {
-			switch ( me.type ) {
-				case 'skype':
-					// hack to fix multiple browser tabs on Skype link click, re #11
-					if ( e.url.match(/https:\/\/web.skype.com\/..\/undefined/) ) {
-						e.preventDefault();
-						return;
-					} else if ( e.url.indexOf('imgpsh_fullsize') >= 0 ) {
-						ipc.send('image:download', e.url, e.target.partition);
-						e.preventDefault();
-						return;
-					}
-					break;
-				case 'hangouts':
-					e.preventDefault();
-					if ( e.url.indexOf('plus.google.com/u/0/photos/albums') >= 0 ) {
-						ipc.send('image:popup', e.url, e.target.partition);
-						return;
-					} else if ( e.url.indexOf('/el/CONVERSATION/') >= 0 ) {
-						me.add({
-							 xtype: 'window'
-							,title: 'Video Call'
-							,width: '80%'
-							,height: '80%'
-							,maximizable: true
-							,resizable: true
-							,draggable: true
-							,collapsible: true
-							,items: {
-								 xtype: 'component'
-								,hideMode: 'offsets'
-								,autoRender: true
-								,autoShow: true
-								,autoEl: {
-									 tag: 'webview'
-									,src: e.url
-									,style: 'width:100%;height:100%;'
-									,partition: me.getWebView().partition
-									,useragent: me.getUserAgent()
-								}
-							}
-						}).show();
-						return;
-					}
-					break;
-				case 'slack':
-					if ( e.url.indexOf('slack.com/call/') >= 0 ) {
-						me.add({
-							 xtype: 'window'
-							,title: Ext.String.htmlEncode(e.options.title)
-							,width: e.options.width
-							,height: e.options.height
-							,maximizable: true
-							,resizable: true
-							,draggable: true
-							,collapsible: true
-							,items: {
-								 xtype: 'component'
-								,hideMode: 'offsets'
-								,autoRender: true
-								,autoShow: true
-								,autoEl: {
-									 tag: 'webview'
-									,src: e.url
-									,style: 'width:100%;height:100%;'
-									,partition: me.getWebView().partition
-									,useragent: me.getUserAgent()
-								}
-							}
-						}).show();
-						e.preventDefault();
-						return;
-					}
-					break;
-				case 'icloud':
-					if ( e.url.indexOf('index.html#compose') >= 0 ) {
-						me.add({
-							 xtype: 'window'
-							,title: 'iCloud - Compose'
-							,width: 700
-							,height: 500
-							,maximizable: true
-							,resizable: true
-							,draggable: true
-							,collapsible: true
-							,items: {
-								 xtype: 'component'
-								,itemId: 'webview'
-								,hideMode: 'offsets'
-								,autoRender: true
-								,autoShow: true
-								,autoEl: {
-									 tag: 'webview'
-									,src: e.url
-									,style: 'width:100%;height:100%;'
-									,partition: me.getWebView().partition
-									,useragent: me.getUserAgent()
-									,preload: './resources/js/hamsket-modal-api.js'
-								}
-							}
-							,listeners: {
-								show(win) {
-									const webview = win.down('#webview').el.dom;
-									webview.addEventListener('ipc-message', function(event) {
-										const channel = event.channel;
-										switch (channel) {
-											case 'close':
-												win.close();
-												break;
-											default:
-												break;
-										}
-									});
-								}
-							}
-						}).show();
-						e.preventDefault();
-						return;
-					}
-					break;
-				case 'flowdock':
-					if ( e.disposition === 'new-window' ) {
-						e.preventDefault();
-						require('electron').remote.shell.openExternal(e.url);
-					}
-					return;
-				default:
-					break;
-			}
-
-			const protocol = require('url').parse(e.url).protocol;
-			if (protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:') {
-				e.preventDefault();
-				require('electron').remote.shell.openExternal(e.url);
-			}
+		webview.addEventListener('new-window', function (e) {
+			e.preventDefault();
+			const { URL } = require('url');
+			const url = new URL(e.url);
+			const protocol = url.protocol;
+			// Block some Deep links to prevent that open its app (Ex: Slack)
+			if (['slack:'].includes(protocol)) return;
+			// Allow Deep links
+			if (!['http:', 'https:', 'about:'].includes(protocol)) return require('@electron/remote').shell.openExternal(url.href);
 		});
 
 		webview.addEventListener('will-navigate', function(e, url) {
@@ -424,6 +281,7 @@ Ext.define('Hamsket.ux.WebView',{
 		}
 
 		webview.addEventListener("dom-ready", function(e) {
+			me.isReady = true;
 			// Mute Webview
 			if ( me.record.get('muted') || localStorage.getItem('locked') || JSON.parse(localStorage.getItem('dontDisturb')) ) me.setAudioMuted(true, true);
 
@@ -487,29 +345,33 @@ Ext.define('Hamsket.ux.WebView',{
 
 			// Prevent Title blinking (some services have) and only allow when the title have an unread regex match: "(3) Title"
 			if ( Ext.getStore('ServicesList').getById(me.record.get('type')).get('titleBlink') ) {
-				const js_preventBlink = `const originalTitle=document.title;Object.defineProperty(document,"title",{configurable:!0,set(a){null===a.match(new RegExp("[(]([0-9•]+)[)][ ](.*)","g"))&&a!==originalTitle||(document.getElementsByTagName("title")[0].innerHTML=a)},get:()=>document.getElementsByTagName("title")[0].innerHTML});`;
-				js_inject += js_preventBlink;
+				const js_preventBlink = `const originalTitle=document.title;Object.defineProperty(document,"title",{configurable:!0,set(a){null===a.match(new RegExp("[(]([0-9•]+)[)][ ](.*)","g"))&&a!==originalTitle||(document.getElementsByTagName("title")[0].textContent=a)},get:()=>document.getElementsByTagName("title")[0].textContent});`;
+				js_inject += '{' + js_preventBlink + '}';
 			}
 
 
 			// Scroll always to top (bug)
-			js_inject += 'document.body.scrollTop=0;';
-
+			js_inject += '{document.body.scrollTop=0;}';
 			// Handles Certificate Errors
-			me.getWebContents().on('certificate-error', function(event, url, error, certificate, callback) {
-				if ( me.record.get('trust') ) {
-					event.preventDefault();
-					callback(true);
-				} else {
-					callback(false);
-				}
+			me.getWebContents().then(webContents => {
+				webContents.on('certificate-error', (event, url, error, certificate, callback) => {
+					if (me.record.get('trust')) {
+						event.preventDefault();
+						callback(true);
+					} else {
+						callback(false);
+					}
+					me.down('statusbar').keep = true;
+					me.down('statusbar').show();
+					me.down('statusbar').setStatus({
+						text: '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Certification Warning'
+					});
+					me.down('statusbar').down('button').show();
 
-				me.down('statusbar').keep = true;
-				me.down('statusbar').show();
-				me.down('statusbar').setStatus({
-					text: '<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Certification Warning'
 				});
-				me.down('statusbar').down('button').show();
+				return webContents;
+			}).catch(error => {
+				console.error(error);
 			});
 
 			webview.executeJavaScript(js_inject);
@@ -568,7 +430,7 @@ Ext.define('Hamsket.ux.WebView',{
 			}
 
 			function showWindowAndActivateTab(event) {
-				const currentWindow = require('electron').remote.getCurrentWindow();
+				const currentWindow = require('@electron/remote').getCurrentWindow();
 				currentWindow.show();
 				currentWindow.focus();
 				const tabPanel = Ext.cq1('app-main');
@@ -789,7 +651,10 @@ Ext.define('Hamsket.ux.WebView',{
 	}
 	,setZoomLevel(level)
 	{
-		this.getWebContents().zoomLevel = level;
+		this.getWebContents().then(webContents => {
+			webContents.zoomLevel = level;
+			return webContents;
+		}).catch(error => console.log(error));
 	}
 
 	,zoomIn() {
@@ -823,21 +688,26 @@ Ext.define('Hamsket.ux.WebView',{
 	}
 
 	,getWebView() {
-		if ( this.record.get('enabled') ) {
-			return this.down('component').el.dom;
-		} else {
-			return false;
-		}
+		return this.record.get('enabled') ? this.down('component').el.dom : false;
 	}
 	,getWebContents() {
-		if ( this.record.get('enabled') ) {
-			const remote = require('electron').remote;
+		const promise = new Promise((resolve, reject) => {
 			const webview = this.getWebView();
-			const id = webview.getWebContentsId();
-			return remote.webContents.fromId(id);
-		} else {
-			return false;
-		}
+			const webContents = () => {
+				const remote = require('@electron/remote');
+				const id = webview.getWebContentsId();
+				const webContents = remote.webContents.fromId(id);
+				return webContents;
+			};
+			if (this.record.get('enabled') && this.isReady) {
+				resolve(webContents());
+			} else {
+				webview.addEventListener("dom-ready", () => {
+					resolve(webContents());
+				});
+			}
+		});
+		return promise;
 	}
 	,getUserAgent() {
 		const me = this;
@@ -869,12 +739,14 @@ Ext.define('Hamsket.ux.WebView',{
 	}
 	,updateUserAgent() {
 		const me = this;
-		const webcontents = me.getWebContents();
-		webcontents.setUserAgent(me.getUserAgent());
+		me.getWebContents().then(webContents => {
+			webContents.setUserAgent(me.getUserAgent());
+			return webContents;
+		}).catch(error => console.error(error));
 	}
 	,getOSArch(platform) {
 		const me = this;
-		const remote = require('electron').remote;
+		const remote = require('@electron/remote');
 		platform = platform ? platform : remote.require('os').platform();
 		let arch = remote.require('os').arch();
 
@@ -896,7 +768,7 @@ Ext.define('Hamsket.ux.WebView',{
 		return arch;
 	}
 	,getOSArchType() {
-		let arch = require('electron').remote.require('os').arch();
+		let arch = require('@electron/remote').require('os').arch();
 
 		switch(arch) {
 			case 'x64':
@@ -928,7 +800,7 @@ Ext.define('Hamsket.ux.WebView',{
 	}
 	,getOSPlatform(platform) {
 		const me = this;
-		platform = platform ? platform : require('electron').remote.require('os').platform();
+		platform = platform ? platform : require('@electron/remote').require('os').platform();
 		switch (platform) {
 			case 'win32':
 				platform = `${me.getOSRelease(platform)}; ${me.getOSArch(platform)}`;
@@ -951,15 +823,15 @@ Ext.define('Hamsket.ux.WebView',{
 		return platform;
 	}
 	,isWindows(platform) {
-		platform = platform ? platform : require('electron').remote.require('os').platform();
+		platform = platform ? platform : require('@electron/remote').require('os').platform();
 		return platform === 'win32';
 	}
 	,isMac(platform) {
-		platform = platform ? platform : require('electron').remote.require('os').platform();
+		platform = platform ? platform : require('@electron/remote').require('os').platform();
 		return platform === 'darwin';
 	}
 	,is32bit() {
-		const arch = require('electron').remote.require('os').arch();
+		const arch = require('@electron/remote').require('os').arch();
 		if (arch === 'ia32' || arch === 'x32')
 			return true;
 		else
@@ -967,7 +839,7 @@ Ext.define('Hamsket.ux.WebView',{
 	}
 	,getOSRelease(platform) {
 		const me = this;
-		const remote = require('electron').remote;
+		const remote = require('@electron/remote');
 		if (me.isWindows(platform)) {
 			if (platform)
 			{
@@ -983,13 +855,13 @@ Ext.define('Hamsket.ux.WebView',{
 		}
 	}
 	,getChromeVersion(version) {
-		return version || require('electron').remote.require('process').versions['chrome'];
+		return version || require('@electron/remote').process.versions['chrome'];
 	}
 	,getElectronVersion() {
-		return require('electron').require('process').versions['electron'];
+		return require('@electron/remote').process.versions['electron'];
 	}
 	,getAppVersion() {
-		return require('electron').remote.app.getVersion();
+		return require('@electron/remote').app.getVersion();
 	}
 	,blur() {
 		this.getWebView().blur();

@@ -26,7 +26,7 @@
 [dependencies]: https://img.shields.io/david/TheGoddessInari/hamsket.svg
 [dev-dependencies]: https://img.shields.io/david/dev/TheGoddessInari/hamsket.svg
 
-##### Nightly build artifacts are available in Windows ([Win64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket.Setup.0.6.2.exe)), Mac ([DMG](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.2.dmg) / [App](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.2-mac.zip)), and Linux ([AppImage64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.2.AppImage) / [RPM64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.2.x86_64.rpm) / [DEB64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket_0.6.2_amd64.deb) / [Tarball64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.2.tar.gz)) packaging flavors. <!-- omit in toc -->
+##### Nightly build artifacts are available in Windows ([Win64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket.Setup.0.6.3.exe)), Mac ([DMG](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.dmg) / [App](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3-mac.zip)), and Linux ([AppImage64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.AppImage) / [RPM64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.x86_64.rpm) / [DEB64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket_0.6.3_amd64.deb) / [Tarball64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.tar.gz)) packaging flavors. <!-- omit in toc -->
 
 ###### Logo designed by [Andriy Yurchenko](http://andyur.com/). <!-- omit in toc -->
 
@@ -217,9 +217,9 @@ Keep in mind, I'm not pushing this. I'll do my best regardless.
 To build your own copy, you need:
 
 - An 8.0 version of the [Java SE Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
-- [Ruby](https://www.ruby-lang.org/en/downloads/) 2.3 or newer.
+- [Ruby](https://www.ruby-lang.org/en/downloads/) >2.3 && <3.0.
 - [Sencha CMD](https://www.sencha.com/products/extjs/cmd-download/) 6.7.0 or newer, and to install it with the Compass extension.
-- [NodeJS](https://nodejs.org/en/download/) 8.5.0 (10.0+ preferred) or newer with npm.
+- [NodeJS](https://nodejs.org/en/download/) 14.x or newer with npm.
 
 These **need** to be added to your PATH.
 

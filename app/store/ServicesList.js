@@ -28,7 +28,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,description: locale['services[0]']
 			,url: 'https://web.whatsapp.com/'
 			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll("#pane-side .VOr2j");let count=0;for(const i of elements){const gp=i.parentNode.parentNode;0===gp.querySelectorAll('#pane-side *[data-icon="muted"]').length&&count++}hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
+			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll("#pane-side ._23LrM");let count=0;for(const i of elements){const gp=i.parentNode.parentNode;0===gp.querySelectorAll('#pane-side *[data-icon="muted"]').length&&count++}hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
 		},
 		{
 			 id: 'slack'
@@ -56,6 +56,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,type: 'messaging'
 			,titleBlink: true
 			,note: 'To enable desktop notifications, you have to go to Options inside Messenger.'
+			,js_unread: `const titleTest=new RegExp("^\\((\\d+)\\)"),checkUnread=()=>{let count=0;const isNotification=titleTest.test(document.title);isNotification?count=hamsket.parseIntOrZero(titleTest.exec(document.title)[1]):(count=document.querySelectorAll("._5fx8:not(._569x),._1ht3:not(._569x)").length,0===count&&(count=document.querySelectorAll(".pq6dq46d.is6700om.qu0x051f.esr5mh6w.e9989ue4.r7d6kgcz.s45kfl79.emlxlaya.bkmhp75w.spb7xbtv.cyypbtt7.fwizqjfa").length));const messageRequests=document.querySelector("._5nxf");messageRequests&&(count+=hamsket.parseIntOrZero(messageRequests.textContent)),hamsket.updateBadge(count)};setInterval(checkUnread,3e3);`
 		},
 		{
 			 id: 'skype'
@@ -75,7 +76,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,type: 'messaging'
 			,titleBlink: true
 			,manual_notifications: true
-			,js_unread: `let checkUnread=()=>{let myframe=document.getElementById("hangout-landing-chat").lastChild,mydocument=myframe.contentDocument||myframe.contentWindow.document;hamsket.updateBadge(mydocument.body.getElementsByClassName("ee").length)};setInterval(checkUnread,3e3);`
+			,js_unread: `const checkUnread=()=>{const myframe=document.querySelector("#hangout-landing-chat iframe"),mydocument=myframe&&"contentDocument"in myframe?myframe.contentDocument:myframe.contentWindow.document,count=mydocument?mydocument.body.querySelectorAll(".ee").length:0;hamsket.updateBadge(count)};setInterval(checkUnread,3e3);`
 		},
 		{
 			 id: 'hipchat'
@@ -94,7 +95,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,description: locale['services[7]']
 			,url: 'https://web.telegram.org/'
 			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const e=document.getElementsByClassName("im_dialog_badge badge");let t=0;for(let i of e)i.classList.contains("im_dialog_badge_muted")||(t+=parseInt(i.innerHTML.trim()));hamsket.updateBadge(t)};setInterval(checkUnread,3e3);`
+			,js_unread: `const checkUnread=()=>{const unread_messages=document.querySelectorAll(".badge.unread:not(.is-muted), .Badge.unread:not(.muted)");let count=0;for(const unread of unread_messages)count+=hamsket.parseIntOrZero(unread.textContent.trim());hamsket.updateBadge(count)};setInterval(checkUnread,3e3);`
 		},
 		{
 			 id: 'wechat'
@@ -169,7 +170,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,url: 'https://discordapp.com/login'
 			,type: 'messaging'
 			,titleBlink: true
-			,js_unread: `let getMentionCount=badges=>{let alerts=0;for(const badge of badges)alerts+=parseInt(badge.innerText,10)||0;return alerts},getServerUnread=badges=>{let alerts=0;for(const badge of badges)alerts+="1"===badge.style.opacity&&"8px"===badge.style.height?1:0;return alerts},checkUnread=()=>{const mentions=document.querySelectorAll(".lowerBadge-29hYVK > .numberBadge-2s8kKX");unread=document.getElementsByClassName("item-2hkk8m");const direct=getMentionCount(mentions);let indirect=getServerUnread(unread);indirect+=document.getElementsByClassName("unread-3zKkbm").length,hamsket.updateBadge(direct,indirect)};setInterval(checkUnread,3e3);`
+			,js_unread: `const getMentionCount=badges=>{let alerts=0;for(const badge of badges)alerts+=hamsket.parseIntOrZero(badge.textContent);return alerts},getServerUnread=badges=>{let alerts=0;for(const badge of badges)alerts+="1"===badge.style.opacity&&"8px"===badge.style.height?1:0;return alerts},checkUnread=()=>{const mentions=document.querySelectorAll('[class*="lowerBadge-"] > [class*="numberBadge-"]'),unread=document.querySelectorAll('[class*="pill-"] > [class*="item-"]'),direct=getMentionCount(mentions),indirect=getServerUnread(unread);hamsket.updateBadge(direct,indirect)};setInterval(checkUnread,3e3);`
 			,note: 'To enable desktop notifications, you have to go to Options inside Discord.'
 		},
 		{
@@ -180,7 +181,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,url: 'https://mail.live.com/'
 			,type: 'email'
 			,manual_notifications: true
-			,js_unread: `let checkUnread=()=>{const fav=$(".ms-FocusZone [role=tree]:first i[data-icon-name=Inbox]").siblings()[1],folders=$(".ms-FocusZone [role=tree]:nth(1)")[0].children[1].querySelector("span span"),innerText=fav?fav.innerText:folders?folders.innerText:0,i=parseInt(innerText,10)||0;hamsket.updateBadge(i)};setInterval(checkUnread,3e3);`
+			,js_unread: `let checkUnread=()=>{const fav=document.querySelector(".ms-FocusZone [role=tree] i[data-icon-name=Inbox]").parentNode.parentNode.lastElementChild,folders=document.querySelectorAll(".ms-FocusZone [role=tree]")[1].children[1].querySelector("span span"),textContent=fav?fav.textContent:folders?folders.textContent:0,count=hamsket.parseIntOrZero(textContent);hamsket.updateBadge(count)};setInterval(checkUnread,3e3);`
 		},
 		{
 			 id: 'outlook365'
@@ -190,7 +191,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,url: 'https://outlook.office.com/owa/'
 			,type: 'email'
 			,manual_notifications: true
-			,js_unread: `let checkUnread=()=>{const fav=$(".ms-FocusZone [role=tree]:first i[data-icon-name=Inbox]").siblings()[1],folders=$(".ms-FocusZone [role=tree]:nth(1)")[0].children[1].querySelector("span span"),innerText=fav?fav.innerText:folders?folders.innerText:0,i=parseInt(innerText,10)||0;hamsket.updateBadge(i)};setInterval(checkUnread,3e3);`
+			,js_unread: `let checkUnread=()=>{const inbox=document.querySelector(".ms-FocusZone i[data-icon-name=Inbox]").parentNode.parentNode.querySelector("span span"),result=inbox?inbox.textContent:0,count=hamsket.parseIntOrZero(result);hamsket.updateBadge(count)};setInterval(checkUnread,3e3);`
 		},
 		{
 			 id: 'yahoo'
@@ -551,16 +552,6 @@ Ext.define('Hamsket.store.ServicesList', {
 			,type: 'messaging'
 		},
 		{
-			 id: 'riot'
-			,logo: 'riot.png'
-			,name: 'Riot (deprecated)'
-			,description: 'Riot is a simple and elegant collaboration environment that gathers all of your different conversations and app integrations into one single app.'
-			,url: 'https://riot.im/app/'
-			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const a=document.getElementsByClassName("mx_RoomTile_nameContainer");let b=0;for(let i of a){const c=i.getElementsByClassName("mx_RoomTile_badge");for(let ii of c){const iiTrim=parseInt(ii.textContent.trim());iiTrim%1==0&&(b+=iiTrim)}}hamsket.updateBadge(b)};setInterval(checkUnread,1e3);`
-			,custom_domain: true
-		},
-		{
 			 id: 'Element'
 			,logo: 'element.png'
 			,name: 'Element'
@@ -775,7 +766,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,url: 'https://mastodon.social/auth/sign_in'
 			,type: 'messaging'
 			,custom_domain: true
-			,note: '<a href="https://instances.mastodon.xyz/" target="_blank">List of instances</a>'
+			,note: '<a href="https://instances.social/" target="_blank">List of instances</a>'
 		},
 		{
 			 id: 'teamworkchat'

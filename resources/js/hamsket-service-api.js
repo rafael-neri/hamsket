@@ -2,8 +2,7 @@
  * This file is loaded in the service web views to provide a Hamsket API.
  */
 
-const { ipcRenderer, remote } = require('electron');
-const contextMenu = require('electron-context-menu');
+const { ipcRenderer } = require('electron');
 
 /**
  * Make the Hamsket API available via a global "hamsket" variable.
@@ -37,11 +36,11 @@ window.hamsket.updateBadge = function(direct, indirect = 0) {
  */
 window.hamsket.clearUnreadCount = function() {
 	ipcRenderer.sendToHost('hamsket.clearUnreadCount');
-}
+};
 
 window.hamsket.parseIntOrZero = function (n) {
-	const result = parseInt(n, 10);
-	return isNaN(result) ? 0 : result;
+	const result = Number.parseInt(n, 10);
+	return Number.isNaN(result) ? 0 : result;
 };
 
 window.hamsket.isInViewport = function(node) {
@@ -52,13 +51,6 @@ window.hamsket.isInViewport = function(node) {
         rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
         rect.top < (window.innerHeight || document.documentElement.clientHeight);
 };
-
-contextMenu({
-	window: remote.getCurrentWebContents(),
-	showCopyImageAddress: true,
-	showSaveImage: false,
-	showSaveImageAs: true
-});
 
 
 /**
@@ -79,4 +71,8 @@ Notification.prototype = NativeNotification.prototype;
 Notification.permission = NativeNotification.permission;
 Notification.requestPermission = NativeNotification.requestPermission.bind(Notification);
 
-window.close = function() { location.href = location.origin };
+window.close = function() { location.href = location.origin; };
+
+// Electron really screwed up here. atob and btoa are broken in recent versions, so override them.
+window.atob = data => Buffer.from(data, "base64").toString("latin1");
+window.btoa = data => Buffer.from(data, "latin1").toString("base64");
