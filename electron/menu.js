@@ -177,7 +177,6 @@ module.exports = function(config) {
 				},
 				{
 					label: `&Commands`,
-					visible: false,
 					submenu: [
 						{
 							label: `Next Tab`,
@@ -306,8 +305,22 @@ module.exports = function(config) {
 							}
 						},
 						{
+							label: `Do Not Disturb`,
+							accelerator: 'CmdOrCtrl+Shift+M',
+							click() {
+								sendAction('toggleDoNotDisturb');
+							},
+						},
+						{
 							label: `Lock Hamsket`,
 							accelerator: 'Alt+F2',
+							click() {
+								sendAction('lockWindow');
+							},
+						},
+						{
+							label: `Lock Hamsket`,
+							accelerator: 'CmdOrCtrl+Shift+L',
 							click() {
 								sendAction('lockWindow');
 							}
