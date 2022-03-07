@@ -41,21 +41,22 @@ Working on your first Pull Request? You can learn how from this *free* series [H
 
 ### Prerequisites
 
-| Prerequisite                                                  | Version |
-| ------------------------------------------------------------- | ------- |
-| [Sencha](https://www.sencha.com/products/extjs/cmd-download/) | `=6.1.2.15`  |
-| [Ruby](https://www.ruby-lang.org/en/downloads/)               | `=2.3` |
-| [Node.js](https://nodejs.org)                                  | `~ ^4.0.0`  |
-| npm (comes with Node)                                         | `~ ^3.8.7`  |
+| Prerequisite                                                                                           | Version |
+| ------------------------------------------------------------------------------------------------------ | ------- |
+| [Java SE Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html)          | `=8.0` |
+| [Sencha](https://www.sencha.com/products/extjs/cmd-download/) - install it with the Compass extension  | `~6.7` |
+| [Ruby](https://www.ruby-lang.org/en/downloads/)                                                        | `>2.3, < 3.0` |
+| [Node.js](https://nodejs.org)                                                                          | `>=14.0.0` |
 
 > _Updating to the latest releases is recommended_.
 
 If Node.js, ruby, or sencha cmd is already installed on your machine, run the following commands to validate the versions:
 
 ```shell
-node -v
-ruby -v
+java -version
 sencha
+ruby -v
+node -v
 ```
 
 If your versions are lower than the prerequisite versions, you should update.
@@ -103,7 +104,7 @@ Before you start working, you will need to create a separate branch specific to 
 
 #### Naming Your Branch
 
-Name the branch something like `fix/xxx` or `feature/xxx` where `xxx` is a short description of the changes or feature you are attempting to add. For example 
+Name the branch something like `fix/xxx` or `feature/xxx` where `xxx` is a short description of the changes or feature you are attempting to add. For example
 
 `fix/email-login` would be a branch where you fix something specific to email login.
 
@@ -225,3 +226,21 @@ commit. When you push it to your fork you will need to do a force push to
 overwrite your old commit: `git push --force`
 
 Be sure to post in the PR conversation that you have made the requested changes.
+
+### Building an installer
+
+```shell
+npm install
+npm run repack:win64
+```
+
+You can substitute `win64` for `linux32`, `linux64`, `win32`, or `osx` as desired. This will create an unpacked directory in '**dist**' for testing.
+
+```shell
+npm run setup
+```
+
+This step instead of **repack** will create an installer appropriate to your platform in '**dist**'.
+You can place unpacked files over where the installers normally place their files for development/testing purposes (eg `/Applications` folder in macOS).
+
+**NOTE:** 32-bit builds are **deprecated** by electron-builder and are likely to be removed at some point in the future.

@@ -42,7 +42,6 @@
 - [Features](#features)
 - [Privacy](#privacy)
 - [Donations](#donations)
-- [Compiling](#compiling)
 - [Contributing](#contributing)
 - [Quickstart](#quickstart)
 - [Disclosure](#disclosure)
@@ -209,37 +208,6 @@ Keep in mind, I'm not pushing this. I'll do my best regardless.
 | Type         |                    URL/Wallet                    |
 | ------------ | :----------------------------------------------: |
 | GoFundMe     |       <https://www.gofundme.com/Hamsket>       |
-
-----------
-
-## Compiling
-
-To build your own copy, you need:
-
-- An 8.0 version of the [Java SE Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
-- [Ruby](https://www.ruby-lang.org/en/downloads/) >2.3 && <3.0.
-- [Sencha CMD](https://www.sencha.com/products/extjs/cmd-download/) 6.7.0 or newer, and to install it with the Compass extension.
-- [NodeJS](https://nodejs.org/en/download/) 14.x or newer with npm.
-
-These **need** to be added to your PATH.
-
-```shell
-git clone https://github.com/TheGoddessInari/hamsket.git
-cd hamsket
-npm install
-npm run repack:win64
-```
-
-You can substitute win64 for linux32, linux64, win32, or osx as desired. This will create an unpacked directory in '**dist**' for testing.
-
-```shell
-npm run setup
-```
-
-This step instead of **repack** will create an installer appropriate to your platform in '**dist**'.
-You can place unpacked files over where the installers normally place their files for development/testing purposes.
-
-**NOTE:** 32-bit builds are **deprecated** by electron-builder and are likely to be removed at some point in the future.
 
 ----------
 
