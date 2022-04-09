@@ -19,7 +19,10 @@ window.hamsket.locale = ipcRenderer.sendSync('getConfig').locale;
  * @param {*} count	The unread count
  */
 window.hamsket.setUnreadCount = function(count) {
-	ipcRenderer.sendToHost('hamsket.setUnreadCount', count);
+	ipcRenderer.sendToHost(
+		'hamsket.setUnreadCount',
+		window.hamsket.parseIntOrZero(count)
+	);
 };
 
 /**
@@ -28,7 +31,11 @@ window.hamsket.setUnreadCount = function(count) {
  * @param {*} indirect
  */
 window.hamsket.updateBadge = function(direct, indirect = 0) {
-	ipcRenderer.sendToHost('hamsket.updateBadge', direct, indirect);
+	ipcRenderer.sendToHost(
+		'hamsket.updateBadge',
+		window.hamsket.parseIntOrZero(direct),
+		window.hamsket.parseIntOrZero(indirect)
+	);
 };
 
 /**
@@ -38,9 +45,18 @@ window.hamsket.clearUnreadCount = function() {
 	ipcRenderer.sendToHost('hamsket.clearUnreadCount');
 };
 
-window.hamsket.parseIntOrZero = function (n) {
-	const result = Number.parseInt(n, 10);
-	return Number.isNaN(result) ? 0 : result;
+window.hamsket.parseIntOrZero = function (text) {
+	if (text === undefined || text === null) {
+		return 0;
+	}
+
+	// Parse number to integer
+	// This will correct errors that recipes may introduce, e.g.
+	// by sending a String instead of an integer
+	const parsedNumber = Number.parseInt(text.toString(), 10);
+	const adjustedNumber = Number.isNaN(parsedNumber) ? 0 : parsedNumber;
+	// Handle negative value
+	return Math.max(adjustedNumber, 0);
 };
 
 window.hamsket.isInViewport = function(node) {
