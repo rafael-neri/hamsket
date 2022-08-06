@@ -26,7 +26,7 @@
 [dependencies]: https://img.shields.io/david/TheGoddessInari/hamsket.svg
 [dev-dependencies]: https://img.shields.io/david/dev/TheGoddessInari/hamsket.svg
 
-##### Nightly build artifacts are available in Windows ([Win64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket.Setup.0.6.3.exe)), Mac ([DMG](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.dmg) / [App](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3-mac.zip)), and Linux ([AppImage64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.AppImage) / [RPM64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.x86_64.rpm) / [DEB64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket_0.6.3_amd64.deb) / [Tarball64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.3.tar.gz)) packaging flavors. <!-- omit in toc -->
+##### Nightly build artifacts are available in Windows ([Win64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket.Setup.0.6.4.exe)), Mac ([DMG](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.4.dmg) / [App](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.4-mac.zip)), and Linux ([AppImage64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.4.AppImage) / [RPM64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.4.x86_64.rpm) / [DEB64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket_0.6.4_amd64.deb) / [Tarball64](https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-0.6.4.tar.gz)) packaging flavors. <!-- omit in toc -->
 
 ###### Logo designed by [Andriy Yurchenko](http://andyur.com/). <!-- omit in toc -->
 
@@ -38,7 +38,7 @@
 
 - [Table of Contents](#table-of-contents)
 - [Screenshot](#screenshot)
-- [Services available - 94](#services-available---94)
+- [Services available - 95](#services-available---95)
 - [Features](#features)
 - [Privacy](#privacy)
 - [Donations](#donations)
@@ -56,7 +56,7 @@
 
 ----------
 
-## Services available - 94
+## Services available - 95
 
 <img width="80" align="left" src="./resources/icons/whatsapp.png" alt="WhatsApp" title="WhatsApp">
 <img width="80" align="left" src="./resources/icons/messenger.png" alt="Messenger" title="Messenger">
@@ -158,6 +158,7 @@
 <img width="80" align="left" src="./resources/icons/hangoutschat.png" alt="Hangouts Chat" title="Hangouts Chat">
 <img width="80" align="left" src="./resources/icons/messengerpages.png" alt="Messenger for Business" title="Messenger for Business">
 <img width="80" align="left" src="./resources/icons/androidmessages.png" alt="Android Messages" title="Android Messages">
+<img width="80" align="left" src="./resources/icons/instagram.png" alt="Instagram" title="Instagram">
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
@@ -206,9 +207,9 @@ Auth0 is disabled pending name change and rewrite of the functionality to best p
 
 Keep in mind, I'm not pushing this. I'll do my best regardless.
 
-| Type         |                    URL/Wallet                    |
-| ------------ | :----------------------------------------------: |
-| GoFundMe     |       <https://www.gofundme.com/Hamsket>       |
+| Type                |                    URL/Wallet                    |
+| --------------------| :----------------------------------------------: |
+| GitHub Sponsors     |       <https://github.com/sponsors/TheGoddessInari/>       |
 
 ----------
 

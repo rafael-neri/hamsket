@@ -29,13 +29,6 @@ Ext.define('Hamsket.view.main.Main', {
 		items: [
 			{
 				 xtype: 'button'
-				,html: '<span class="fa fa-heart" style="color:red;font-size:16px;cursor:pointer;padding:0 5px;"></span>'
-				,baseCls: ''
-				,tooltip: locale['app.main[25]']
-				,href: 'https://www.gofundme.com/Hamsket'
-			},
-			{
-				 xtype: 'button'
 				,html: '<span class="fa fa-user-plus" style="color:red;font-size:16px;cursor:pointer;padding:0 5px;"></span>'
 				,baseCls: ''
 				,tooltip: 'Sponsor'
@@ -294,11 +287,6 @@ Ext.define('Hamsket.view.main.Main', {
 						{
 							 text: '<b>Help out</b> with'
 							,pressed: true
-						}
-						,{
-							 text: locale['app.main[25]']
-							,glyph: 'XF21E@FontAwesome'
-							,href: 'https://www.gofundme.com/Hamsket'
 						}
 						,{
 							 text: 'Sponsor'
