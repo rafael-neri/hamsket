@@ -259,7 +259,7 @@ npm install
 npm start
 ```
 
-See [Contributing.md](./CONTRIBUTING.md) for more detailed information about getting set up.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for more detailed information about getting set up.
 
 ----------
 
