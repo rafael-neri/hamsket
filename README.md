@@ -116,6 +116,7 @@
 <img width="80" align="left" src="./resources/icons/icloud.png" alt="iCloud Mail" title="iCloud Mail">
 <img width="80" align="left" src="./resources/icons/irccloud.png" alt="IRC Cloud" title="IRC Cloud">
 <img width="80" align="left" src="./resources/icons/kiwi.png" alt="Kiwi IRC" title="Kiwi IRC">
+<img width="80" align="left" src="./resources/icons/glowingbear.png" alt="Glowing Bear" title="Glowing Bear">
 <img width="80" align="left" src="./resources/icons/smooch.png" alt="Smooch" title="Smooch">
 <img width="80" align="left" src="./resources/icons/crisp.png" alt="Crisp" title="Crisp">
 <img width="80" align="left" src="./resources/icons/flock.png" alt="Flock" title="Flock">

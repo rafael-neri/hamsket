@@ -462,6 +462,15 @@ Ext.define('Hamsket.store.ServicesList', {
 			,custom_domain: true
 		},
 		{
+			 id: 'glowingbear'
+			,logo: 'glowingbear.png'
+			,name: 'Glowing Bear'
+			,description: 'Glowing Bear is a web frontend for the WeeChat IRC client and strives to be a modern interface.'
+			,url: 'https://www.glowing-bear.org'
+			,type: 'messaging'
+			,custom_domain: true
+		},
+		{
 			 id: 'ryver'
 			,logo: 'ryver.png'
 			,name: 'Ryver'
