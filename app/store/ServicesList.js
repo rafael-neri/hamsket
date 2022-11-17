@@ -207,17 +207,8 @@ Ext.define('Hamsket.store.ServicesList', {
 			,logo: 'protonmail.png'
 			,name: 'ProtonMail'
 			,description: locale['services[20]']
-			,url: 'https://mail.protonmail.com/inbox'
+			,url: 'https://mail.proton.me'
 			,type: 'email'
-		},
-		{
-			 id: 'protonmailch'
-			,logo: 'protonmail.png'
-			,name: 'ProtonMail CH'
-			,description: locale['services[20]']
-			,url: 'https://app.protonmail.ch/inbox'
-			,type: 'email'
-			,note: 'Read <a href="https://protonmail.com/support/knowledge-base/what-is-the-difference-between-protonmail-com-and-protonmail-ch/" target="_blank">HERE</a> to see the differences between protonmail.com and protonmail.ch.'
 		},
 		{
 			 id: 'tutanota'
