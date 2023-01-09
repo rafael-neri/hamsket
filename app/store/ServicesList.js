@@ -59,17 +59,10 @@ Ext.define('Hamsket.store.ServicesList', {
 			,js_unread: `
 checkUnread=()=>{
 
-    // console.log("\\\\ \\\\\\\\  ");
-    console.log("these are backslashes \\ \\ \\");
     const reg = /Chats, /;
-    console.log("reg is: " + reg);
 
     const mapped = Array.from(document.querySelectorAll('a[aria-label]'))
           .map((x) => x.getAttribute('aria-label'));
-    console.log("mapped is " + mapped)
-    console.log("first one is: " + mapped[0]);
-    console.log("calling test using regex: " + reg);
-    console.log("result: " + reg.test(mapped[0]));
     const strings = mapped.filter((x) => reg.test(x));
 
     console.log("filtered is " + strings);
@@ -77,9 +70,9 @@ checkUnread=()=>{
     var parsed = 0;
     if (strings.length > 0) {
 
-    const value = strings[0].split(" ")[1];
+		const value = strings[0].split(" ")[1];
 
-    parsed = hamsket.parseIntOrZero(value);
+		parsed = hamsket.parseIntOrZero(value);
 	}
     hamsket.updateBadge(parsed)
 };
