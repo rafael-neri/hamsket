@@ -28,7 +28,7 @@ Ext.define('Hamsket.store.ServicesList', {
 			,description: locale['services[0]']
 			,url: 'https://web.whatsapp.com/'
 			,type: 'messaging'
-			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll("#pane-side ._23LrM");let count=0;for(const i of elements){const gp=i.parentNode.parentNode;0===gp.querySelectorAll('#pane-side *[data-icon="muted"]').length&&count++}hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
+			,js_unread: `let checkUnread=()=>{const elements=document.querySelectorAll("#pane-side div span div span[aria-label]");let count=0;for(const i of elements){const gp=i.parentNode.parentNode;0===gp.querySelectorAll('#pane-side *[data-icon="muted"]').length&&count++}hamsket.updateBadge(count)};setInterval(checkUnread,1e3);let unregister_queue=[];navigator.serviceWorker.getRegistrations().then(registrations=>{for(const registration of registrations)unregister_queue.push(registration.unregister());return unregister_queue}).then(queue=>{}).catch(err=>{});`
 		},
 		{
 			 id: 'slack'
@@ -52,11 +52,32 @@ Ext.define('Hamsket.store.ServicesList', {
 			,logo: 'messenger.png'
 			,name: 'Messenger'
 			,description: locale['services[3]']
-			,url: ' https://www.facebook.com/messages/'
+			,url: 'https://www.messenger.com'
 			,type: 'messaging'
 			,titleBlink: true
 			,note: 'To enable desktop notifications, you have to go to Options inside Messenger.'
-			,js_unread: `const titleTest=new RegExp("^\\((\\d+)\\)"),checkUnread=()=>{let count=0;const isNotification=titleTest.test(document.title);isNotification?count=hamsket.parseIntOrZero(titleTest.exec(document.title)[1]):(count=document.querySelectorAll("._5fx8:not(._569x),._1ht3:not(._569x)").length,0===count&&(count=document.querySelectorAll(".pq6dq46d.is6700om.qu0x051f.esr5mh6w.e9989ue4.r7d6kgcz.s45kfl79.emlxlaya.bkmhp75w.spb7xbtv.cyypbtt7.fwizqjfa").length));const messageRequests=document.querySelector("._5nxf");messageRequests&&(count+=hamsket.parseIntOrZero(messageRequests.textContent)),hamsket.updateBadge(count)};setInterval(checkUnread,3e3);`
+			,js_unread: `
+checkUnread=()=>{
+
+    const reg = /Chats, /;
+
+    const mapped = Array.from(document.querySelectorAll('a[aria-label]'))
+          .map((x) => x.getAttribute('aria-label'));
+    const strings = mapped.filter((x) => reg.test(x));
+
+    console.log("filtered is " + strings);
+
+    var parsed = 0;
+    if (strings.length > 0) {
+
+		const value = strings[0].split(" ")[1];
+
+		parsed = hamsket.parseIntOrZero(value);
+	}
+    hamsket.updateBadge(parsed)
+};
+setInterval(checkUnread,3e3);
+`
 		},
 		{
 			 id: 'skype'
