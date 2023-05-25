@@ -251,7 +251,7 @@ function updateBadge(title) {
 	title = title.split(" - ")[0]; //Discard service name if present, could also contain digits
 	let messageCount = title.match(/\d+/g) ? parseInt(title.match(/\d+/g).join("")) : 0;
 	messageCount = isNaN(messageCount) ? 0 : messageCount;
-	
+
 	tray.setBadge(messageCount, config.get('systemtray_indicator'));
 
 	if (process.platform === 'win32') { // Windows
@@ -452,28 +452,28 @@ app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
 			event.preventDefault();
 		}
 	);
+	// Open links in default browser
 	contents.on('did-create-window', (win, details) => {
-		// Here we center the new window.
 		win.center();
-		// The following code is for handling the about:blank cases only.
-		if (!['about:blank', 'about:blank#blocked'].includes(details.url)) return;
-		let once = false;
-		win.webContents.on('will-navigate', (e, nextURL) => {
-			if (once) return;
-			if (['about:blank', 'about:blank#blocked'].includes(nextURL)) return;
-			once = true;
-			let allow = false;
-			for (const url of allowPopUp) {
-				if (nextURL.includes(url)) {
-					allow = true;
-					break;
-				}
+		const {url, disposition} = details;
+		const protocol = require('url').parse(url).protocol;
+		switch ( disposition ) {
+			case 'new-window': {
+				const win = new BrowserWindow(options);
+				win.once('ready-to-show', () => win.show());
+				win.loadURL(url);
+				break;
 			}
-			// If the url is in aboutBlankOnlyWindow we handle this as a popup window
-			if (allow) return win.show();
-			shell.openExternal(url);
-			win.close();
-		});
+			case 'foreground-tab': {
+				if (protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:') {
+					shell.openExternal(url);
+					win.close();
+				}
+				break;
+			}
+			default:
+				break;
+		}
 	});
 });
 
@@ -544,7 +544,7 @@ ipcMain.on('toggleWin', function(event, alwaysShow) {
 			mainWindow.close();
 		} else {
 			mainWindow.show();
-		} 
+		}
 	} else if ( mainWindow.isMinimized() && !mainWindow.isMaximized() && !mainWindow.isVisible() ) { // Minimized
 		mainWindow.restore();
 	} else if ( !mainWindow.isMinimized() && !mainWindow.isMaximized() && mainWindow.isVisible() ) { // Windowed mode
